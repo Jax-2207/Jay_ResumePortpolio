@@ -78,7 +78,8 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
     scene.fog = new THREE.FogExp2(0x020812, 0.018)
 
     const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 200)
-    camera.position.set(0, 3, 14)
+    const isMobile = W < 768
+    camera.position.set(0, isMobile ? 5 : 3, isMobile ? 26 : 14)
     camera.lookAt(0, 0, 0)
 
     // ── LIGHTS ────────────────────────────────────────────────────────────────
@@ -435,6 +436,8 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
       const w = mount.clientWidth, h = mount.clientHeight
       renderer.setSize(w, h)
       camera.aspect = w / h
+      const isMob = w < 768
+      camera.position.set(0, isMob ? 5 : 3, isMob ? 26 : 14)
       camera.updateProjectionMatrix()
     }
     window.addEventListener('resize', onResize)
@@ -675,7 +678,7 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
               NITRO OVERRIDE
             </div>
             <div style={{
-              fontSize: 52, fontWeight: 900, fontFamily: 'Courier New',
+              fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 900, fontFamily: 'Courier New',
               color: nitroColor, textShadow: `0 0 40px ${nitroColor}, 0 0 80px ${nitroColor}88`,
               letterSpacing: 3,
             }}>
@@ -709,7 +712,7 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
 
       {/* SKIP */}
       <button onClick={onComplete}
-        className="absolute bottom-6 right-6 z-10"
+        className="absolute top-6 right-6 z-10"
         style={{
           background: 'rgba(0,212,170,0.08)', border: '1px solid rgba(0,212,170,0.3)',
           color: '#00d4aa', padding: '6px 18px', borderRadius: 4,
@@ -758,7 +761,7 @@ function RPMGauge({ rpm }: { rpm: number }) {
     ctx.fillStyle = 'rgba(124,58,237,0.4)'; ctx.font = '9px Courier New'
     ctx.fillText('RPM', cx, cy + 35)
   }, [rpm])
-  return <canvas ref={cRef} style={{ position: 'absolute', bottom: 24, left: 24, width: 130, height: 130 }} />
+  return <canvas ref={cRef} className="absolute bottom-6 left-3 md:left-6 w-[90px] md:w-[130px] h-[90px] md:h-[130px]" />
 }
 
 function Speedometer({ speed }: { speed: number }) {
@@ -813,5 +816,5 @@ function Speedometer({ speed }: { speed: number }) {
     ctx.fillStyle = 'rgba(0,212,170,0.4)'; ctx.font = '10px Courier New'
     ctx.shadowBlur = 0; ctx.fillText('km/h', cx, cy + 42)
   }, [speed])
-  return <canvas ref={cRef} style={{ position: 'absolute', bottom: 16, right: 20, width: 160, height: 160 }} />
+  return <canvas ref={cRef} className="absolute bottom-6 right-3 md:right-6 w-[100px] md:w-[150px] h-[100px] md:h-[150px]" />
 }
