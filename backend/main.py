@@ -29,8 +29,8 @@ try:
 except ImportError:
     DocxDocument = None
 
-# Sentence transformers
-from sentence_transformers import SentenceTransformer
+# FastEmbed (Lightweight ONNX alternative to SentenceTransformers)
+from fastembed import TextEmbedding
 
 # FAISS
 import faiss
@@ -51,7 +51,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
 TOP_K = 3
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # ─── App Setup ─────────────────────────────────────────────────────────────────
@@ -76,8 +76,8 @@ app.add_middleware(
 )
 
 # ─── Load Embedding Model ───────────────────────────────────────────────────────
-logger.info("Loading SentenceTransformer model...")
-embedder = SentenceTransformer(EMBEDDING_MODEL)
+logger.info("Loading FastEmbed model...")
+embedder = TextEmbedding(model_name=EMBEDDING_MODEL)
 logger.info("Model loaded.")
 
 # ─── In-Memory Session Store ────────────────────────────────────────────────────
@@ -161,7 +161,8 @@ def build_faiss_index(embeddings: np.ndarray) -> faiss.Index:
 
 def retrieve_top_k(query: str, session: dict, k: int = TOP_K):
     """Retrieve top-k chunks by cosine similarity."""
-    query_embedding = embedder.encode([query], normalize_embeddings=True).astype(np.float32)
+    query_embedding_list = list(embedder.embed([query]))
+    query_embedding = np.array(query_embedding_list, dtype=np.float32)
     distances, indices = session["index"].search(query_embedding, k)
     results = []
     for i, idx in enumerate(indices[0]):
@@ -236,8 +237,8 @@ async def upload_file(file: UploadFile = File(...)):
 
     # Create embeddings
     try:
-        embeddings = embedder.encode(chunks, show_progress_bar=False, normalize_embeddings=True)
-        embeddings = np.array(embeddings, dtype=np.float32)
+        embeddings_generator = embedder.embed(chunks)
+        embeddings = np.array(list(embeddings_generator), dtype=np.float32)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Embedding failed: {str(e)}")
 
