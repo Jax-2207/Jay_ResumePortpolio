@@ -147,7 +147,7 @@ export default function Hero() {
           <div style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', color: '#e2e8f0', marginBottom: '8px' }}>
             Jay Amol Wani
           </div>
-          <div style={{ fontSize: 'clamp(1.2rem, 3.5vw, 2.5rem)' }} className="whitespace-nowrap">
+          <div style={{ fontSize: 'clamp(1.2rem, 3.5vw, 2.5rem)' }} className="flex flex-wrap justify-center gap-x-2">
             <span style={{ color: '#00d4aa' }}>Full Stack</span>
             <span style={{ color: '#64748b' }}> + </span>
             <span style={{ color: '#7c3aed' }}>AI Engineer</span>
@@ -159,7 +159,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-xl md:text-2xl mb-6 font-mono"
+          className="text-sm sm:text-base md:text-xl mb-6 font-mono max-w-2xl mx-auto px-4 leading-relaxed"
           style={{ color: '#94a3b8' }}
         >
           KIT&apos;s College of Engineering, Kolhapur · CGPA 8.78 · Graduating 2027

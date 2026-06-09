@@ -21,8 +21,8 @@ export default function NeuralBackground() {
     canvas.width = W
     canvas.height = H
 
-    const NODE_COUNT = 55
-    const MAX_DIST = 160
+    const NODE_COUNT = W < 768 ? 25 : 55
+    const MAX_DIST = W < 768 ? 120 : 160
     const nodes: Node[] = Array.from({ length: NODE_COUNT }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,
