@@ -221,7 +221,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.75 }}
-          className="flex flex-wrap justify-center gap-6 md:gap-10"
+          className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-6 md:gap-10 mx-auto max-w-sm md:max-w-none"
         >
           {STATS.map((stat, i) => (
             <div key={i} className="text-center group">
@@ -238,12 +238,12 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - Hidden on mobile to prevent overlap */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
           style={{ color: '#64748b' }}
         >
           <span className="text-xs font-mono tracking-widest uppercase">Scroll</span>

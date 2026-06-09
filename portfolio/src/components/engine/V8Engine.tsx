@@ -64,10 +64,11 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
     const H = mount.clientHeight
 
     // ── RENDERER ─────────────────────────────────────────────────────────────
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const isMobile = W < 768
+    const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true })
     renderer.setSize(W, H)
-    renderer.setPixelRatio(W < 768 ? 1 : Math.min(window.devicePixelRatio, 2))
-    renderer.shadowMap.enabled = true
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2))
+    renderer.shadowMap.enabled = !isMobile
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.2
@@ -78,7 +79,6 @@ export default function V8Engine({ onComplete }: V8EngineProps) {
     scene.fog = new THREE.FogExp2(0x020812, 0.018)
 
     const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 200)
-    const isMobile = W < 768
     camera.position.set(0, isMobile ? 5 : 3, isMobile ? 26 : 14)
     camera.lookAt(0, 0, 0)
 
